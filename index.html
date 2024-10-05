@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saklar Tema Gelap dengan Animasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: black;
+            text-align: center;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            background-color: white;
+            transition: color 1s;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('https://source.unsplash.com/1600x900/?nature,water'); /* Gambar Siang */
+            background-size: cover;
+            animation: moveBackground 30s linear infinite;
+            filter: brightness(0.7); /* Menyesuaikan kecerahan gambar */
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-10%, -10%); }
+            100% { transform: translate(0, 0); }
+        }
+
+        #switchButton {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.5s, transform 0.5s;
+            position: relative;
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        #switchButton:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        #switchButton:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #switchButton.night {
+            background-color: #333;
+            color: white;
+        }
+
+        #greeting {
+            font-size: 2em;
+            transition: transform 0.5s, opacity 0.5s;
+        }
+
+        .fadeOut {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .fadeIn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sticker {
+            position: absolute;
+            width: 100px;
+            animation: float 5s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Penempatan stiker lucu */
+        .sticker1 { top: 20%; left: 10%; }
+        .sticker2 { top: 50%; right: 15%; }
+        .sticker3 { bottom: 15%; left: 40%; }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <h1 id="greeting">Selamat Siang!</h1>
+    <button id="switchButton" onclick="toggleTheme()">Switch to Night</button>
+
+    <!-- Stiker Lucu -->
+    <img src="https://i.imgur.com/x8H7LNY.png" class="sticker sticker1" alt="sticker1">
+    <img src="https://i.imgur.com/ZqA8Ceb.png" class="sticker sticker2" alt="sticker2">
+    <img src="https://i.imgur.com/mjJ2t5e.png" class="sticker sticker3" alt="sticker3">
+
+    <script>
+        function toggleTheme() {
+            var body = document.body;
+            var button = document.getElementById('switchButton');
+            var greeting = document.getElementById('greeting');
+            var background = document.querySelector('.background');
+
+            // Animasi text keluar dulu
+            greeting.classList.add('fadeOut');
+
+            // Menunggu animasi keluar selesai (0.5 detik), lalu ubah tema
+            setTimeout(function () {
+                // Toggle theme
+                if (body.style.backgroundColor === 'white' || body.style.backgroundColor === '') {
+                    body.style.backgroundColor = 'black';
+                    body.style.color = 'white';
+                    greeting.textContent = 'Selamat Malam!';
+                    button.textContent = 'Switch to Day';
+                    button.classList.add('night');
+                    background.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?night,sky')"; // Gambar Malam
+                } else {
+                    body.style.backgroundColor = 'white';
+                    body.style.color = 'black';
+                    greeting.textContent = 'Selamat Siang!';
+                    button.textContent = 'Switch to Night';
+                    button.classList.remove('night');
+                    background.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?nature,water')"; // Gambar Siang
+                }
+
+                // Setelah tema diubah, animasi masuk text
+                greeting.classList.remove('fadeOut');
+                greeting.classList.add('fadeIn');
+            }, 500);
+        }
+    </script>
+</body>
+</html>
